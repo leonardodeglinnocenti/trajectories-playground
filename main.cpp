@@ -111,13 +111,13 @@ public:
     void moveUp() {
         if (isValidMove(x, y - 1)) {
             y--;
-            direction = 2;
+            this->direction = 2;
         }
         else if(canBounce) {
             map.hittingAnimation(x, y - 1);
             if (isValidMove(x, y + 1)) {
                 y++;
-                direction = 8;
+                this->direction = 8;
             }
         }
         else {
@@ -128,13 +128,13 @@ public:
     void moveDown() {
         if (isValidMove(x, y + 1)) {
             y++;
-            direction = 8;
+            this->direction = 8;
         }
         else if(canBounce) {
             map.hittingAnimation(x, y + 1);
             if (isValidMove(x, y - 1)) {
                 y--;
-                direction = 2;
+                this->direction = 2;
             }
         }
         else {
@@ -145,12 +145,12 @@ public:
     void moveLeft() {
         if (isValidMove(x - 1, y)) {
             x--;
-            direction = 4;
+            this->direction = 4;
         }
         else if(canBounce) {
             map.hittingAnimation(x - 1, y);
             x++;
-            direction = 6;
+            this->direction = 6;
         }
         else {
             map.hittingAnimation(x - 1, y);
@@ -160,12 +160,12 @@ public:
     void moveRight() {
         if (isValidMove(x + 1, y)) {
             x++;
-            direction = 6;
+            this->direction = 6;
         }
         else if(canBounce) {
             map.hittingAnimation(x + 1, y);
             x--;
-            direction = 4;
+            this->direction = 4;
         }
         else {
             map.hittingAnimation(x + 1, y);
@@ -182,10 +182,11 @@ public:
             map.hittingAnimation(x - 1, y - 1);
             if (isValidMove(x - 1, y)) {
                 x = x - 2;
-                direction = 4;
+                this->direction = 4;
             }
             else if (isValidMove(x, y - 1)) {
                 y--;
+                this->direction = 2;
             }
         }
         else {
@@ -197,17 +198,17 @@ public:
         if (isValidMove(x + 1, y - 1)) {
             x++;
             y--;
-            direction = 3;
+            this->direction = 3;
         }
         else if(canBounce) {
             map.hittingAnimation(x + 1, y - 1);
             if (isValidMove(x + 1, y)) {
                 x = x + 2;
-                direction = 6;
+                this->direction = 6;
             }
             else if (isValidMove(x, y - 1)) {
                 y--;
-                direction = 2;
+                this->direction = 2;
             }
         }
         else {
@@ -219,17 +220,17 @@ public:
         if (isValidMove(x - 1, y + 1)) {
             x--;
             y++;
-            direction = 7;
+            this->direction = 7;
         }
         else if(canBounce) {
             map.hittingAnimation(x - 1, y + 1);
             if (isValidMove(x - 2, y)) {
                 x = x - 2;
-                direction = 4;
+                this->direction = 4;
             }
             else if (isValidMove(x, y + 1)) {
                 y++;
-                direction = 8;
+                this->direction = 8;
             }
         }
         else {
@@ -241,17 +242,17 @@ public:
         if (isValidMove(x + 1, y + 1)) {
             x++;
             y++;
-            direction = 9;
+            this->direction = 9;
         }
         else if(canBounce) {
             map.hittingAnimation(x + 1, y + 1);
             if (isValidMove(x + 1, y)) {
                 x = x + 2;
-                direction = 6;
+                this->direction = 6;
             }
             else if (isValidMove(x, y + 1)) {
                 y++;
-                direction = 8;
+                this->direction = 8;
             }
         }
         else {
@@ -278,6 +279,14 @@ public:
         return direction;
     }
 
+    void setDirection(unsigned int direction) {
+        this->direction = direction;
+    }
+
+    Map& getMap() {
+        return map;
+    }
+
     // Bounce forward feature for the robot, takes into account the previous position
     // If the robot hits a wall diagonally, it will bounce forward
     // If the robot hits a wall horizontally or vertically, it will bounce back
@@ -290,10 +299,9 @@ class Path {
 private:
     std::vector<std::pair<int, int>> routes;
     Robot robot;
-    Map map;
 
 public:
-    Path(int x, int y, Robot& robot, Map& map) : robot(robot), map(map) {
+    Path(int x, int y, Robot& robot) : robot(robot) {
         routes.push_back(robot.getRobotPosition());
     }
 
@@ -396,7 +404,7 @@ int main() {
         //path.performRandomPath(1, 1, 1000, 100);
 
         // Loop takes in input a first movement and then moves the robot in the same direction
-        Path path = Path(1, 1, robot, map);
+        Path path = Path(1, 1, robot);
 
         int ch = getch();
         switch (ch) {
